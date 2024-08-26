@@ -26,7 +26,7 @@ public class WoodapiClient {
         this.secretKey = secretKey;
     }
 
-    public void getNameByGet(String name) {
+    public String getNameByGet(String name) {
         // 最简单的HTTP请求，可以自动通过header等信息判断编码，不区分HTTP和HTTPS
         String result1 = HttpUtil.get("localhost:8123/api/name?name=" + name);
 
@@ -41,23 +41,29 @@ public class WoodapiClient {
         System.out.println(result1);
         System.out.println(result2);
         System.out.println(result3);
+
+        return result3;
     }
 
-    public void getNameByPost(String name) {
+    public String getNameByPost(String name) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
 
         String result= HttpUtil.post("localhost:8123/api/name", paramMap);
         System.out.println(result);
+
+        return result;
     }
 
-    public void getUsernameByPost(User user) {
+    public String getUsernameByPost(User user) {
         String jsonStr = JSONUtil.toJsonStr(user);
         HttpResponse response = HttpRequest.post("localhost:8123/api/name/user")
                 .addHeaders(getHeaderMap(jsonStr))
                 .body(jsonStr).
                 execute();
         System.out.println(response.body());
+
+        return response.body();
     }
 
     private HashMap<String, String> getHeaderMap(String body) {
