@@ -27,29 +27,33 @@ public class WoodapiClient {
     }
 
     public String getNameByGet(String name) {
-        // 最简单的HTTP请求，可以自动通过header等信息判断编码，不区分HTTP和HTTPS
-        String result1 = HttpUtil.get("localhost:8123/api/name?name=" + name);
+        String result = HttpUtil.get("localhost:8091/api/name?name=" + name);
 
-        // 当无法识别页面编码的时候，可以自定义请求页面的编码
-        String result2 = HttpUtil.get("localhost:8123/api/name" + name, CharsetUtil.CHARSET_UTF_8);
+        System.out.println(result);
 
-        //可以单独传入http参数，这样参数会自动做URL编码，拼接在URL中
-        HashMap<String, Object> paramMap = new HashMap<>();
-        paramMap.put("name", "卢本伟");
-        String result3 = HttpUtil.get("localhost:8123/api/name", paramMap);
+//        // 最简单的HTTP请求，可以自动通过header等信息判断编码，不区分HTTP和HTTPS
+//        String result1 = HttpUtil.get("localhost:8123/api/name?name=" + name);
+//
+//        // 当无法识别页面编码的时候，可以自定义请求页面的编码
+//        String result2 = HttpUtil.get("localhost:8123/api/name?name=" + name, CharsetUtil.CHARSET_UTF_8);
+//
+//        //可以单独传入http参数，这样参数会自动做URL编码，拼接在URL中
+//        HashMap<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("name", name);
+//        String result3 = HttpUtil.get("localhost:8123/api/name", paramMap);
+//
+//        System.out.println(result1);
+//        System.out.println(result2);
+//        System.out.println(result3);
 
-        System.out.println(result1);
-        System.out.println(result2);
-        System.out.println(result3);
-
-        return result3;
+        return result;
     }
 
     public String getNameByPost(String name) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", name);
 
-        String result= HttpUtil.post("localhost:8123/api/name", paramMap);
+        String result= HttpUtil.post("localhost:8091/api/name", paramMap);
         System.out.println(result);
 
         return result;
@@ -57,7 +61,7 @@ public class WoodapiClient {
 
     public String getUsernameByPost(User user) {
         String jsonStr = JSONUtil.toJsonStr(user);
-        HttpResponse response = HttpRequest.post("localhost:8123/api/name/user")
+        HttpResponse response = HttpRequest.post("localhost:8091/api/name/user")
                 .addHeaders(getHeaderMap(jsonStr))
                 .body(jsonStr).
                 execute();
