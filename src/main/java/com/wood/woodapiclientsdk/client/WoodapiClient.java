@@ -1,9 +1,9 @@
 package com.wood.woodapiclientsdk.client;
 
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpStatus;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.wood.woodapiclientsdk.model.User;
@@ -21,54 +21,99 @@ public class WoodapiClient {
 
     private String secretKey;
 
+    private static final String EXTRA_BODY = "userInfoWoodAPI";
+
+    private static final String GATEWAY_HOST = "http://localhost:8091";// 请求网关，网关再将请求转发到真实接口地址
+
+
     public WoodapiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }
 
-    public String getNameByGet(String name) {
-        String result = HttpUtil.get("localhost:8091/api/name?name=" + name);
-
-        System.out.println(result);
-
-//        // 最简单的HTTP请求，可以自动通过header等信息判断编码，不区分HTTP和HTTPS
-//        String result1 = HttpUtil.get("localhost:8123/api/name?name=" + name);
-//
-//        // 当无法识别页面编码的时候，可以自定义请求页面的编码
-//        String result2 = HttpUtil.get("localhost:8123/api/name?name=" + name, CharsetUtil.CHARSET_UTF_8);
-//
-//        //可以单独传入http参数，这样参数会自动做URL编码，拼接在URL中
-//        HashMap<String, Object> paramMap = new HashMap<>();
-//        paramMap.put("name", name);
-//        String result3 = HttpUtil.get("localhost:8123/api/name", paramMap);
-//
-//        System.out.println(result1);
-//        System.out.println(result2);
-//        System.out.println(result3);
-
-        return result;
+    /**
+     * 随机获取一句毒鸡汤
+     * @return
+     */
+    public String getPoisonousChickenSoup() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/poisonousChickenSoup")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
     }
 
-    public String getNameByPost(String name) {
-        HashMap<String, Object> paramMap = new HashMap<>();
-        paramMap.put("name", name);
-
-        String result= HttpUtil.post("localhost:8091/api/name", paramMap);
-        System.out.println(result);
-
-        return result;
+    /**
+     * 随机壁纸
+     * @return
+     */
+    public String getRandomWallpaper() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/bing")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
     }
 
-    public String getUsernameByPost(User user) {
-        String jsonStr = JSONUtil.toJsonStr(user);
-        HttpResponse response = HttpRequest.post("localhost:8091/api/name/user")
-                .addHeaders(getHeaderMap(jsonStr))
-                .body(jsonStr).
-                execute();
-        System.out.println(response.body());
-
-        return response.body();
+    /**
+     * 随机土味情话
+     * @return
+     */
+    public String getLoveTalk() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/text/love")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
     }
+
+    /**
+     * 每日一句励志英语
+     * @return
+     */
+    public String getDailyEnglish() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/dailyEnglish")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
+    }
+
+    /**
+     * 随机笑话
+     * @return
+     */
+    public String getRandomJoke() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/text/joke")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
+    }
+
+    /**
+     * 随机笑话
+     * @return
+     */
+    public String getWeather() {
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/weather")
+                .addHeaders(getHeaderMap(EXTRA_BODY))
+                .body(EXTRA_BODY)
+                .execute();
+        return httpResponse.body();
+    }
+
+//    public HttpResponse getTest() {
+//        HttpResponse response = HttpRequest.get("http://localhost:8091/api/name/test")
+//                .header("X-Redirect-Uri", "http://localhost:8123")
+//                .execute();
+//        if (response.getStatus() != HttpStatus.HTTP_OK) {
+//            throw new RuntimeException();
+//        }
+//        System.out.println(response.body());
+//
+//        return response;
+//    }
 
     private HashMap<String, String> getHeaderMap(String body) {
         HashMap<String, String> hashMap = new HashMap<>();
